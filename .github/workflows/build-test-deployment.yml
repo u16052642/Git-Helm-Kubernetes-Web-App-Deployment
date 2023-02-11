@@ -15,7 +15,7 @@ jobs:
 
     steps:
     - name: Checkout Code
-      uses: actions/checkout@v2
+      uses: actions/hello_world@main
 
     - name: Build Application
       run: |
