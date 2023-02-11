@@ -1,0 +1,70 @@
+apiVersion: v2
+name: hello-world
+version: 0.1.0
+description: Demo of kubernates deployment using helm charts
+maintainers:
+- name: divin lonji
+- email: divinlonji@gmail.com
+
+
+# Deployment
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-world-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: hello-world
+  template:
+    metadata:
+      labels:
+        app: hello-world
+    spec:
+      containers:
+      - name: hello-world
+        image: hello-world:latest
+        ports:
+        - containerPort: 8080
+
+# Service
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-world-service
+spec:
+  selector:
+    app: hello-world
+  ports:
+  - name: http
+    port: 80
+    targetPort: 8080
+  type: ClusterIP
+
+# ConfigMap
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hello-world-config
+data:
+  message: "Hello, World!"
+
+# Secret
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: hello-world-secret
+data:
+  password: passwd123
+
+# In this example, the Deployment specifies that we want 2 replicas of our Javascript hello-world application, 
+# running in containers with the image hello-world:latest, and listening on port 8080. 
+# The Service specifies that network traffic should be directed to the Pods 
+# with the label app: hello-world on port 80, which is forwarded to the containers' port 8080. 
+# The ConfigMap stores a single configuration value with the key message and the value
+# "Hello, World!", and the Secret stores a single sensitive value with the key password.
